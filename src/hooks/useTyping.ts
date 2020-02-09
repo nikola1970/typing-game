@@ -26,7 +26,7 @@ type Action =
 const initialState: State = {
     isPlaying: false, // is game active
     score: 0, // current score
-    time: 60, // time left
+    time: 15, // time left
     word: [], // current word
     correctLetterIndex: 0, // current correct index of the give word
 };
@@ -44,7 +44,7 @@ function reducer(state: State, action: Action): State {
                 ...state,
                 isPlaying: true,
                 score: 0,
-                time: 60,
+                time: 15,
             };
         case GAME.NEXT_WORD:
             return {
@@ -104,7 +104,8 @@ export default function useTyping(words: string[]) {
             // if the pressed letter is the same as the current letter of the word then update the current index of the word
             if (
                 word[correctLetterIndex] &&
-                key.toUpperCase() === word[correctLetterIndex].toUpperCase()
+                key.toUpperCase() === word[correctLetterIndex].toUpperCase() &&
+                time > 0
             ) {
                 dispatch({ type: GAME.SET_LETTER_INDEX });
             }
@@ -115,7 +116,7 @@ export default function useTyping(words: string[]) {
         return () => {
             document.removeEventListener('keypress', handleKeyPress);
         };
-    }, [correctLetterIndex, word]);
+    }, [correctLetterIndex, word, time]);
 
     useEffect(() => {
         // this one take care if the given word is successfully typed
