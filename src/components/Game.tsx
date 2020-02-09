@@ -20,7 +20,7 @@ const Game: React.FC<Props> = ({ words }) => {
 
     return (
         <div className="wrapper">
-            <h1>Typing game (React, TypeScript)</h1>
+            <h1>Typing game</h1>
             <p>Type as many words as you can until time runs out!</p>
             <div className="outerWrap">
                 <div className="scoreWrap">
