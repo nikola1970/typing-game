@@ -24,11 +24,11 @@ type Action =
     | { type: GAME.SET_LETTER_INDEX };
 
 const initialState: State = {
-    isPlaying: false,
-    score: 0,
-    time: 60,
-    word: [],
-    correctLetterIndex: 0,
+    isPlaying: false, // is game active
+    score: 0, // current score
+    time: 60, // time left
+    word: [], // current word
+    correctLetterIndex: 0, // current correct index of the give word
 };
 
 function reducer(state: State, action: Action): State {
@@ -79,13 +79,16 @@ export default function useTyping(words: string[]) {
     );
 
     const handleStart = () => {
+        // start the game
         dispatch({ type: GAME.START_GAME, payload: getNextWord(words) });
     };
     const handleReset = () => {
+        // reset the game after round is finished
         dispatch({ type: GAME.RESET_GAME });
     };
 
     useEffect(() => {
+        // this one runs the countdown
         let id: number;
         if (isPlaying && time > 0) {
             id = window.setInterval(() => {
@@ -96,7 +99,9 @@ export default function useTyping(words: string[]) {
     }, [isPlaying, time]);
 
     useEffect(() => {
+        // this one take care of keyboard typing
         function handleKeyPress({ key }: KeyboardEvent) {
+            // if the pressed letter is the same as the current letter of the word then update the current index of the word
             if (
                 word[correctLetterIndex] &&
                 key.toUpperCase() === word[correctLetterIndex].toUpperCase()
@@ -113,6 +118,7 @@ export default function useTyping(words: string[]) {
     }, [correctLetterIndex, word]);
 
     useEffect(() => {
+        // this one take care if the given word is successfully typed
         if (correctLetterIndex === word.length && word.length > 0) {
             setTimeout(() => {
                 dispatch({ type: GAME.NEXT_WORD, payload: getNextWord(words) });
